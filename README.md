@@ -170,7 +170,7 @@ windows-storage-ops/
 
 ## 致谢
 
-本 Skill 的公开资产化与验证门方法论受启发于 [鲁班（Luban）Skill 打磨工坊](https://github.com/LearnPrompt)，并参考了社区优秀同类作品的设计思路：[win-forge](https://github.com/omerokumus1/win-forge)、[oh-my-disk-cleaner](https://github.com/open-agent-power/oh-my-disk-cleaner)、[disk-cleaner-skills](https://github.com/xiaofenggan01/disk-cleaner-skills)、[windows-cleanup-optimize](https://github.com/hyt315/windows-cleanup-optimize) 与 [agent-cleanup](https://github.com/luchasarie/agent-cleanup)。
+本 Skill 在设计过程中参考了社区优秀同类作品的设计思路：[win-forge](https://github.com/omerokumus1/win-forge)、[oh-my-disk-cleaner](https://github.com/open-agent-power/oh-my-disk-cleaner)、[disk-cleaner-skills](https://github.com/xiaofenggan01/disk-cleaner-skills)、[windows-cleanup-optimize](https://github.com/hyt315/windows-cleanup-optimize) 与 [agent-cleanup](https://github.com/luchasarie/agent-cleanup)。
 
 ## License
 
