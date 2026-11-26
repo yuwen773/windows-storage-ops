@@ -1,0 +1,6 @@
+﻿*.log
+*.bak*
+result_*.json
+undo_*.ps1
+Thumbs.db
+.DS_Store

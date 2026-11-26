@@ -1,0 +1,44 @@
+name: Windows Skill CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  verify-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Verify required Born-Ready files
+        shell: pwsh
+        run: |
+          $required = @(
+            'SKILL.md',
+            'README.md',
+            'README.en.md',
+            'LICENSE',
+            '.claude-plugin/marketplace.json',
+            'examples/real-workstation-case.md',
+            'tests/test-prompts.json',
+            'assets/demo.gif',
+            'CHANGELOG.md'
+          )
+          foreach ($f in $required) {
+            if (-not (Test-Path -LiteralPath $f)) { throw "Missing required file: $f" }
+            Write-Host "[PASS] $f exists"
+          }
+
+      - name: Run full PowerShell 5.1 self-verification suite
+        shell: powershell
+        run: |
+          powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\verify-skill.ps1
+
+      - name: Smoke-test universal quarterly-audit on clean Windows VM
+        shell: powershell
+        run: |
+          powershell.exe -NoProfile -ExecutionPolicy Bypass -File .\scripts\quarterly-audit.ps1

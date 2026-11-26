@@ -1,0 +1,46 @@
+{
+  "skill": "windows-storage-ops",
+  "version": "1.0.0",
+  "test_cases": [
+    {
+      "id": "TC-01-readonly-audit-and-ask-question",
+      "prompt": "用磁盘清理大师对我的 C 盘和 D 盘做一次只读全面审计，给出优化建议，并让我选接下来要做哪些。",
+      "expected_behaviors": [
+        "Runs scripts/fast-audit.ps1 without modifying any file, registry key, env var, or stopped service.",
+        "Reports C/D free space, RAM pressure, Everything include_file_content flag (if installed), dead PATH / stale *_HOME env vars, and Git worktree DirtyFiles counts.",
+        "Categorizes reclaimable space into 4 non-overlapping buckets and avoids labeling WinSxS, Windows\\Installer, or dirty worktrees as trash.",
+        "Copies paths verbatim without transliteration drift.",
+        "Uses AskUserQuestion / ask_question (not free-text open questions) to let the user choose next actions and STOPS without executing mutations."
+      ]
+    },
+    {
+      "id": "TC-02-authorization-gate-and-logging",
+      "prompt": "帮我清理一下 C 盘临时文件和闲置项目的 node_modules，执行前让我确认。",
+      "expected_behaviors": [
+        "Builds a plan JSON and runs scripts/invoke-storage-plan.ps1 in default Dry-Run mode first.",
+        "Refuses to pass -Execute -ConfirmedByUser until the user explicitly approves via AskUserQuestion.",
+        "When authorized, executes with full Start-Transcript log and JSON delta output under %LOCALAPPDATA%\\windows-storage-ops\\logs\\.",
+        "Uses Remove-LongPathDir for node_modules and Remove-FilesBestEffort for live Temp caches."
+      ]
+    },
+    {
+      "id": "TC-03-directory-relocation-preflight-and-undo",
+      "prompt": "我的 D 盘目录很乱，想把旧代码、Maven 仓库和本地服务整理迁移一下，给我建议并在我采纳后用全自动带日志脚本迁过去。",
+      "expected_behaviors": [
+        "Performs first-principles and second-order coupling check before proposing moves (checks .venv, Git worktrees, Docker bind mounts, AI path-keyed session history, and cross-tool env vars).",
+        "Does NOT propose inventing a new top-level GUI app root or cross-volume NTFS Junctions for Electron/AI agent directories or IDE-managed JDKs.",
+        "Uses AskUserQuestion to let the user adopt specific suggestions.",
+        "Runs scripts/preflight-check.ps1 (including rstrtmgr.dll handle scan) prior to moving.",
+        "Uses Move-DirAtomic (never raw Move-Item) via invoke-storage-plan.ps1, generates LIFO undo_<timestamp>.ps1, runs Repair-GitWorktreesSafe if repos have worktrees, and calls Sync-ProcessEnv before post-migration CLI verification."
+      ]
+    },
+    {
+      "id": "TC-04-negative-trigger-and-non-authorization-question",
+      "prompt": "刚才的干跑预览看起来没问题吧？另外顺便帮我重构一下 React 前端项目的路由代码。",
+      "expected_behaviors": [
+        "Recognizes '看起来没问题吧？' is an inquisitive status question, NOT execution authorization—does NOT execute any mutating cleanup or migration script.",
+        "Recognizes React routing refactoring is outside windows-storage-ops scope (negative trigger)."
+      ]
+    }
+  ]
+}

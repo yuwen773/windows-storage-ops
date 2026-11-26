@@ -1,0 +1,107 @@
+﻿{
+    "generated_at":  "2026-11-26T15:40:54+08:00",
+    "title":  "Windows Storage Master - Live Verified Replay",
+    "scenes":  [
+                   {
+                       "id":  "preflight",
+                       "pill":  "1 Pre-Flight",
+                       "title":  "Stage 1: Pre-Flight Probe (ACL + rstrtmgr.dll Lock Scan)",
+                       "command":  ".\\scripts\\preflight-check.ps1 -Paths D:\\DemoWorkstation\\legacy_project",
+                       "exitCode":  0,
+                       "lines":  [
+                                     "=== PRE-FLIGHT CONTEXT (v2) ===",
+                                     "IS_ADMIN : False",
+                                     "USER     : WORKSTATION\\dev",
+                                     "",
+                                     "--- TARGET: D:\\DemoWorkstation\\legacy_project ---",
+                                     "  TYPE       : Directory",
+                                     "  ATTRIBUTES : Directory",
+                                     "  OWNER      : WORKSTATION\\dev",
+                                     "  ACL_LOCKED : False",
+                                     "  PROC_REFS  : 0",
+                                     "  HANDLE_LOCK: 0 (checked 1 files up to depth 2)",
+                                     "  ENV_REFS   : None",
+                                     "  TOP_ITEMS  : 1",
+                                     "  COUPLING   : GitWorktreeRepos=0 | PythonVenvs=0 | DockerCompose=0"
+                                 ]
+                   },
+                   {
+                       "id":  "auth-gate",
+                       "pill":  "2 Auth Gate",
+                       "title":  "Stage 2: Hard Authorization Gate (Blocked Without User Approval)",
+                       "command":  ".\\scripts\\invoke-storage-plan.ps1 -PlanPath .\\cleanup_plan.json -Execute",
+                       "exitCode":  2,
+                       "lines":  [
+                                     ".\\scripts\\invoke-storage-plan.ps1 : AUTHORIZATION GATE BLOCKED: -Execute requires expli",
+                                     "cit -ConfirmedByUser after user approval via AskUserQuestion/confirmation.",
+                                     " "
+                                 ]
+                   },
+                   {
+                       "id":  "dry-run",
+                       "pill":  "3 Dry-Run",
+                       "title":  "Stage 3: Default Dry-Run Preview (Zero Modifications)",
+                       "command":  ".\\scripts\\invoke-storage-plan.ps1 -PlanPath .\\cleanup_plan.json",
+                       "exitCode":  0,
+                       "lines":  [
+                                     "================ STORAGE PLAN EXECUTOR : DRY-RUN PREVIEW (NO CHANGES) ================",
+                                     "Plan     : workstation-cleanup-and-migrate (D:\\DemoWorkstation\\cleanup_plan.json)",
+                                     "Actions  : 3",
+                                     "IS_ADMIN : False",
+                                     "Log File : D:\\DemoWorkstation\\logs\\run_20261126_154048.log",
+                                     "",
+                                     "[1/3] [move_dir_atomic] Atomically archive legacy project",
+                                     "  [DRY-RUN] D:\\DemoWorkstation\\legacy_project -\u003e D:\\DemoWorkstation\\Dev\\archive\\legacy_project (SrcExists=True, DstExists=False)",
+                                     "",
+                                     "[2/3] [clean_cache_best_effort] Clean stale npm cache files",
+                                     "  [DRY-RUN] CLEAN CACHE D:\\DemoWorkstation\\npm_cache_demo (Exists=True)",
+                                     "",
+                                     "[3/3] [update_text_replace] Redirect MySQL datadir to D:\\Services",
+                                     "  [DRY-RUN] CONFIG D:\\DemoWorkstation\\my.ini: \u0027D:\\Work\\Backend\\mysql\\data\u0027 -\u003e \u0027D:\\Services\\mysql\\data\u0027 (Exists=True)",
+                                     "",
+                                     "================ SUMMARY ================",
+                                     "  Drive C:  137.063 GB -\u003e 137.063 GB  (Delta: 0 GB)",
+                                     "  Drive D:  358.408 GB -\u003e 358.408 GB  (Delta: 0 GB)",
+                                     "  JSON Report : D:\\DemoWorkstation\\logs\\result_20261126_154048.json",
+                                     "  Full Log    : D:\\DemoWorkstation\\logs\\run_20261126_154048.log",
+                                     "",
+                                     "=== ALL DONE! You can close this window now. ==="
+                                 ]
+                   },
+                   {
+                       "id":  "execute-undo",
+                       "pill":  "4 Execute \u0026 Undo",
+                       "title":  "Stage 4: Authorized Execution + Transcript Log + Auto LIFO Undo",
+                       "command":  ".\\scripts\\invoke-storage-plan.ps1 -PlanPath .\\cleanup_plan.json -Execute -ConfirmedByUser",
+                       "exitCode":  0,
+                       "lines":  [
+                                     "================ STORAGE PLAN EXECUTOR : EXECUTE (AUTHORIZED) ================",
+                                     "Plan     : workstation-cleanup-and-migrate (D:\\DemoWorkstation\\cleanup_plan.json)",
+                                     "Actions  : 3",
+                                     "IS_ADMIN : False",
+                                     "Log File : D:\\DemoWorkstation\\logs\\run_20261126_154051.log",
+                                     "",
+                                     "[1/3] [move_dir_atomic] Atomically archive legacy project",
+                                     "  [OK] D:\\DemoWorkstation\\legacy_project -\u003e D:\\DemoWorkstation\\Dev\\archive\\legacy_project",
+                                     "",
+                                     "[2/3] [clean_cache_best_effort] Clean stale npm cache files",
+                                     "  [OK] Deleted=1, LockedSkipped=0",
+                                     "",
+                                     "[3/3] [update_text_replace] Redirect MySQL datadir to D:\\Services",
+                                     "  [OK] Updated D:\\DemoWorkstation\\my.ini (backup: D:\\DemoWorkstation\\my.ini.bak_20261126_154051)",
+                                     "",
+                                     "Rollback script generated: D:\\DemoWorkstation\\logs\\undo_20261126_154051.ps1",
+                                     "",
+                                     "================ SUMMARY ================",
+                                     "  Drive C:  137.063 GB -\u003e 137.063 GB  (Delta: 0 GB)",
+                                     "  Drive D:  358.408 GB -\u003e 358.408 GB  (Delta: 0 GB)",
+                                     "  JSON Report : D:\\DemoWorkstation\\logs\\result_20261126_154051.json",
+                                     "  Full Log    : D:\\DemoWorkstation\\logs\\run_20261126_154051.log",
+                                     "",
+                                     "=== ALL DONE! You can close this window now. ===",
+                                     "",
+                                     "[UNDO VERIFIED] Executed undo_20261126_154051.ps1: moved folder \u0026 my.ini 100% restored!"
+                                 ]
+                   }
+               ]
+}

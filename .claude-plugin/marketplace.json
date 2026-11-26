@@ -1,0 +1,29 @@
+{
+  "name": "windows-storage-ops",
+  "owner": {
+    "name": "yuwen773"
+  },
+  "metadata": {
+    "description": "Windows Storage Master — Read-only deep disk auditing, interactive AskUserQuestion decisions, and logged reversible cleanup & directory/service migration for Windows 10/11 developer workstations.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "windows-storage-ops",
+      "source": "./",
+      "description": "End-to-end Windows 10/11 developer workstation disk audit, safe cleanup, directory/toolchain/WSL/Docker/MySQL migration, and quarterly drift monitor.",
+      "version": "1.0.0",
+      "license": "MIT",
+      "keywords": [
+        "windows",
+        "disk-cleanup",
+        "storage-audit",
+        "powershell",
+        "developer-workstation",
+        "wsl2",
+        "docker",
+        "git-worktree"
+      ]
+    }
+  ]
+}
